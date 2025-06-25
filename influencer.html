@@ -1,0 +1,1376 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Creator Profile - The Talent Square</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        font-family: "Inter", sans-serif;
+        background-color: white;
+      }
+      /* Top Navigation Bar */
+      .top-nav {
+        background-color: #ffffff;
+        border-bottom: 1px solid #e2e8f0;
+        position: fixed;
+        z-index: 1;
+        width: 100%;
+      }
+      .top-nav-link {
+        color: #4a5568; /* Grey-700 */
+        font-weight: 500;
+        padding: 1rem;
+        transition: color 0.2s ease;
+      }
+      .top-nav-link:hover {
+        color: #e74c3c; /* Red */
+      }
+      .sign-in-btn {
+        background-color: #e74c3c; /* Red */
+        color: white;
+        padding: 0.5rem 1.5rem;
+        border-radius: 9999px; /* Fully rounded */
+        font-weight: 600;
+        transition: background-color 0.2s ease;
+      }
+      .sign-in-btn:hover {
+        background-color: #c0392b; /* Darker red */
+      }
+
+      /* Main Profile Header */
+      .profile-main-header {
+        width: 100%;
+        border-radius: 20px;
+        object-fit: contain;
+      }
+
+      .text-overlay {
+        position: absolute;
+        bottom: 20px;
+        left: 25%; /* Adjust based on profile image width */
+        color: white;
+        text-align: left;
+      }
+
+      /* Sidebar and Main Content Layout */
+      .sidebar {
+        background-color: #ffffff;
+        border-radius: 0.75rem; /* rounded-xl */
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
+          0 2px 4px -1px rgba(0, 0, 0, 0.06); /* shadow-md */
+        padding: 1.5rem;
+        flex-shrink: 0;
+      }
+      .nav-item {
+        display: flex;
+        align-items: center;
+        padding: 12px 16px;
+        margin-bottom: 8px;
+        border-radius: 10px;
+        font-weight: 500;
+        color: #4a5568; /* Grey-700 */
+        transition: background-color 0.2s ease, color 0.2s ease;
+      }
+      .nav-item:hover {
+        background-color: #e2e8f0; /* Grey-200 */
+        color: #2d3748; /* Grey-800 */
+      }
+      .nav-item.active {
+        background-color: #fefcbf; /* Yellow-200 */
+        color: #d69e2e; /* Yellow-700 */
+      }
+
+      /* Video/Reel Thumbnails */
+      .video-thumbnail {
+        position: relative;
+        width: 100%;
+        padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
+        height: 0;
+        overflow: hidden;
+        border-radius: 0.6rem; /* Adjust for rounded-xl aesthetic */
+      }
+      .video-thumbnail img {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+      .play-button {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background-color: rgba(0, 0, 0, 0.6);
+        border-radius: 50%;
+        padding: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        backdrop-filter: blur(5px); /* Optional: add blur effect */
+      }
+      .play-button svg {
+        fill: white;
+        width: 24px;
+        height: 24px;
+      }
+      .reel-thumbnail {
+        padding-bottom: 133.33%; /* 3:4 aspect ratio for reels */
+      }
+
+      /* Review Cards */
+      .review-card {
+        background-color: white;
+        border-radius: 15px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        padding: 24px;
+      }
+      .rating-stars span {
+        color: #fbbf24; /* Amber-400 */
+        font-size: 1.25rem;
+      }
+
+      /* Carousel buttons for Reels */
+      .carousel-button {
+        background-color: white;
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        cursor: pointer;
+        flex-shrink: 0;
+      }
+
+      /* Footer */
+      .main-footer {
+        background-color: #2d3748; /* Dark grey similar to image */
+        color: white;
+        padding: 3rem 0;
+      }
+      .footer-link {
+        color: #cbd5e0; /* Light grey */
+        transition: color 0.2s ease;
+      }
+      .footer-link:hover {
+        color: white;
+      }
+      .footer-button {
+        background-color: #e74c3c; /* Red */
+        color: white;
+        padding: 0.75rem 2rem;
+        border-radius: 9999px; /* Fully rounded */
+        font-weight: 600;
+        transition: background-color 0.2s ease;
+      }
+      .footer-button:hover {
+        background-color: #c0392b; /* Darker red */
+      }
+      .blur-box {
+        position: relative;
+        width: 300px;
+        margin: 100px auto;
+        padding: 1rem;
+        border-radius: 10px;
+        color: #333;
+        z-index: 1;
+        overflow: hidden;
+      }
+
+      .blur-box::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        backdrop-filter: blur(4px);
+        background-color: #ffffff91; /* Semi-transparent */
+        z-index: -1; /* Push behind content */
+      }
+      .star-filled {
+        color: #ffd700; /* Gold color for filled stars */
+      }
+      .star-empty {
+        color: #ccc; /* Grey color for empty stars */
+      }
+    </style>
+  </head>
+  <body class="bg-gray-100 min-h-screen">
+    <header class="top-nav shadow-sm">
+      <div
+        class="container flex justify-between items-center"
+      >
+        <div class="text-xl font-bold text-gray-800 bg-red-600 py-2 px-4 sm:px-6 lg:px-8">
+            <img src="/images/logo-2024-02-07-08-40-06-4525.png" alt="" width="150" height="70">
+        </div>
+
+        <nav class="hidden xl:flex space-x-6 py-2 px-4 sm:px-6 lg:px-8">
+          <a href="#" class="top-nav-link">Top Creators</a>
+          <a href="#" class="top-nav-link">Find Influencers</a>
+          <a href="#" class="top-nav-link">Talent Management</a>
+          <a href="#" class="top-nav-link">Event Bookings</a>
+          <a href="#" class="top-nav-link">Contact Us</a>
+          <button class="sign-in-btn bg-red-600 flex self-center">
+            Sign In
+          </button>
+        </nav>
+
+        <div class="xl:hidden">
+          <button
+            id="mobile-menu-button"
+            class="text-gray-500 hover:text-gray-700 focus:outline-none"
+          >
+            <svg
+              class="h-6 w-6"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M4 6h16M4 12h16M4 18h16"
+              />
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <div
+        id="mobile-menu"
+        class="xl:hidden fixed inset-y-0 right-0 w-64 bg-white z-50 transform translate-x-full transition-transform duration-300 ease-in-out hidden"
+      >
+        <div class="flex justify-end p-4">
+          <button
+            id="close-mobile-menu-button"
+            class="text-gray-500 hover:text-gray-700 focus:outline-none"
+          >
+            <svg
+              class="h-6 w-6"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M6 18L18 6M6 6l12 12"
+              />
+            </svg>
+          </button>
+        </div>
+        <nav class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+          <a
+            href="#"
+            class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50"
+            >Top Creators</a
+          >
+          <a
+            href="#"
+            class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50"
+            >Find Influencers</a
+          >
+          <a
+            href="#"
+            class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50"
+            >Talent Management</a
+          >
+          <a
+            href="#"
+            class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50"
+            >Event Bookings</a
+          >
+          <a
+            href="#"
+            class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50"
+            >Contact Us</a
+          >
+          <button
+            class="sign-in-btn bg-red-600 flex self-center justify-center w-full"
+          >
+            Sign In
+          </button>
+        </nav>
+      </div>
+    </header>
+
+    <div class="container mx-auto px-4 py-8 bg-white">
+      <!-- Main Profile Header Section -->
+      <div
+        class="profile-main-header mt-[80px] md:mt-[120px] rounded-b-xl mb-16 flex items-end justify-start"
+      >
+        <!-- Background element (as seen in image) -->
+        <img
+          src="images/neeraj-kumar-pal-2024-06-19-03-34-22-8908.jpg"
+          alt=""
+          class="w-full h-[150px] md:h-[300px] object-cover rounded-xl"
+        />
+      </div>
+
+      <!-- Creator Info and Action Button (Below Header) -->
+      <div
+        class="flex flex-col md:flex-row items-start md:items-center justify-between mb-8 bg-white pb-6 px-6 rounded-xl shadow-md relative"
+      >
+        <div class="md:space-x-6 mb-4 md:mb-0">
+          <div
+            class="w-20 h-20 md:w-[100px] md:h-[100px] rounded-xl overflow-hidden border-2 border-gray-200 absolute top-[-100px] left-[20px] md:left-[50px]"
+          >
+            <img
+              src="/images/neeraj-kumar-pal.jpg"
+              alt="Neeraj Pal Small Profile"
+              class="w-20 h-20 md:w-[100px] md:h-[100px]"
+            />
+          </div>
+          <div>
+            <h2 class="text-xl font-semibold text-gray-900 flex gap-4 mb-2">
+              Neeraj Kumar Pal
+              <button
+                class="bg-green-500 hover:bg-green-600 text-white font-normal py-1 px-3 !text-[14px] rounded-md shadow-lg transition-all duration-300 ease-in-out flex items-center space-x-2 text-sm md:text-base"
+              >
+                <span>Verified</span>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="lucide lucide-check"
+                >
+                  <path d="M20 6 9 17l-5-5" />
+                </svg>
+              </button>
+            </h2>
+            <p class="text-gray-700">Writer Bollywood Writer | Poet</p>
+            <div class="flex items-center mt-1 text-yellow-500 text-sm">
+              <span>&#9733;</span><span>&#9733;</span><span>&#9733;</span
+              ><span>&#9733;</span><span>&#9733;</span>
+              <span class="text-gray-600 ml-1">(2) reviews</span>
+            </div>
+            <p class="text-gray-600 text-sm mt-1">Mumbai, India</p>
+            <p class="text-gray-500 text-xs mt-1">
+              Shayar, Lyricist, Poet and Writer..
+            </p>
+          </div>
+        </div>
+        <div class="flex gap-4">
+          <button
+            class="bg-red-600 text-white px-8 py-3 rounded-xl shadow-lg hover:bg-red-700 transition duration-300 font-semibold text-lg md:self-center"
+          >
+            Talk To Creator
+          </button>
+          <div class="border p-4 rounded-xl border-[#e12325]">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="#e12325"
+              stroke="#e12325"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="lucide lucide-phone-icon lucide-phone"
+            >
+              <path
+                d="M13.832 16.568a1 1 0 0 0 1.213-.303l.355-.465A2 2 0 0 1 17 15h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2A18 18 0 0 1 2 4a2 2 0 0 1 2-2h3a2 2 0 0 1 2 2v3a2 2 0 0 1-.8 1.6l-.468.351a1 1 0 0 0-.292 1.233 14 14 0 0 0 6.392 6.384"
+              />
+            </svg>
+          </div>
+        </div>
+      </div>
+
+      <div class="max-w-7xl py-12 mx-auto">
+        <div class="flex flex-col lg:flex-row gap-8">
+          <div class="lg:col-span-1 lg:w-1/4">
+            <div
+              class="bg-white rounded-lg shadow-xl border p-6 lg:sticky lg:top-8"
+            >
+              <div class="space-y-4">
+                <button
+                  class="w-full text-left px-4 py-3 text-[#ff60bfcc] rounded-lg font-medium border border-[#ff60bfcc]"
+                >
+                  Profile
+                </button>
+                <button
+                  class="w-full text-left px-4 py-3 text-pink-200 hover:bg-gray-50 border border-pink-200 rounded-lg font-medium transition-colors"
+                >
+                  Portfolio
+                </button>
+                <button
+                  class="w-full text-left px-4 py-3 text-pink-200 hover:bg-gray-50 border border-pink-200 rounded-lg font-medium transition-colors"
+                >
+                  Reviews
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div class="bg-white rounded-xl shadow-xl lg:w-3/4 p-6">
+            <div class="border-b pb-6">
+              <p id="bioText" class="text-[14px]">
+                <span id="shortText">
+                  The voice of Bigg Boss, a voice-over artist and narrator of
+                  many reality shows. This is Vijay Vikram Singh whose voice
+                  persuades people in Ads and has trained actors like Sanjana
+                  Sanghi and Sharvari Wagh for voice and diction. His
+                  entertaining voice inspires audiences through TEDX talks and
+                  Passion talks . Vijay has appeared in web series such as The
+                  Family ...
+                </span>
+                <span id="fullText" class="hidden">
+                  The voice of Bigg Boss, a voice-over artist and narrator of
+                  many reality shows. This is Vijay Vikram Singh whose voice
+                  persuades people in Ads and has trained actors like Sanjana
+                  Sanghi and Sharvari Wagh for voice and diction. His
+                  entertaining voice inspires audiences through TEDX talks and
+                  Passion talks . Vijay has appeared in web series such as The
+                  Family ... Man, Mirjapur 2, Breathe 2, and many more. Not just
+                  that, he has acted in many plays such as the 8 shows of the
+                  Hindi Adaptation of Arthur Miller’s play ‘All My Sons’, called
+                  ‘Doraha’. He is also the brand Ambassador of Cleand- the
+                  laundry spa Many reality shows like Dance India Dance,
+                  Masterchef and Indian Idol had his voice. He has also voiced
+                  some documentaries for National Geographic. Academically,
+                  Vijay has an MBA in International Business and worked in
+                  corporate for 5 years before switching career to a Voice-Over
+                  artist. His career started as a voice-over artist with Dance
+                  India Dance and his acting career with The Family Man.
+                </span>
+              </p>
+
+              <button
+                id="readMoreBtn"
+                class="text-blue-600 mt-2"
+                onclick="toggleReadMore()"
+              >
+                Read More
+              </button>
+            </div>
+            <div class="mt-4">
+              <section class="bg-white border-b pb-6">
+                <h2 class="text-2xl font-semibold text-gray-800 mb-4">
+                  Videos
+                </h2>
+                <div
+                  class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+                >
+                  <div
+                    class="relative bg-gray-50 rounded-xl overflow-hidden shadow-sm"
+                  >
+                    <div class="video-thumbnail">
+                      <iframe
+                        width="auto"
+                        height="auto"
+                        src="https://www.youtube.com/embed/EK_OgPyj-VE?controls=1"
+                        title="YouTube video player"
+                        frameborder="0"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                        referrerpolicy="strict-origin-when-cross-origin"
+                        allowfullscreen
+                      ></iframe>
+                    </div>
+                  </div>
+                  <div
+                    class="relative bg-gray-50 rounded-xl overflow-hidden shadow-sm"
+                  >
+                    <div class="video-thumbnail">
+                      <iframe
+                        width="auto"
+                        height="auto"
+                        src="https://www.youtube.com/embed/MGiLEnC-PUA?si=FsqOvWm1ywHjO66F"
+                        title="YouTube video player"
+                        frameborder="0"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                        referrerpolicy="strict-origin-when-cross-origin"
+                        allowfullscreen
+                      ></iframe>
+                    </div>
+                  </div>
+                  <div
+                    class="relative bg-gray-50 rounded-xl overflow-hidden shadow-sm"
+                  >
+                    <div class="video-thumbnail">
+                      <iframe
+                        width="auto"
+                        height="auto"
+                        src="https://www.youtube.com/embed/s0Z5HfaZrJE?si=Bfudxq_L3BD7oLp2"
+                        title="YouTube video player"
+                        frameborder="0"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                        referrerpolicy="strict-origin-when-cross-origin"
+                        allowfullscreen
+                      ></iframe>
+                    </div>
+                  </div>
+                </div>
+              </section>
+              <!-- Reels Works Section -->
+              <section class="bg-white mt-4">
+                <h2 class="text-2xl font-semibold text-gray-800 mb-4">
+                  Reels works
+                </h2>
+                <div class="flex items-center justify-between space-x-4">
+                  <!-- <button class="carousel-button">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      class="h-6 w-6 text-gray-600"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M15 19l-7-7 7-7"
+                      />
+                    </svg>
+                  </button> -->
+                  <div
+                    class="flex-1 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 overflow-hidden"
+                  >
+                    <!-- Reel 1 -->
+                    <div
+                      class="bg-white rounded-xl shadow-sm overflow-hidden border border-gray-200"
+                    >
+                      <div class="">
+                        <iframe
+                          width="100%"
+                          height="380"
+                          src="https://www.youtube.com/embed/5rLKwIT2kjU?si=kI-VaFM-o8ATucZb"
+                          title="YouTube video player"
+                          frameborder="0"
+                          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                          referrerpolicy="strict-origin-when-cross-origin"
+                          allowfullscreen
+                        ></iframe>
+                      </div>
+                    </div>
+                    <!-- Reel 2 -->
+                    <div
+                      class="bg-white rounded-xl shadow-sm overflow-hidden border border-gray-200"
+                    >
+                      <div class="">
+                        <iframe
+                          width="100%"
+                          height="380"
+                          src="https://www.youtube.com/embed/AK77GpBP4j4?si=OAnY1_-Ov6y_K6NB"
+                          title="YouTube video player"
+                          frameborder="0"
+                          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                          referrerpolicy="strict-origin-when-cross-origin"
+                          allowfullscreen
+                        ></iframe>
+                      </div>
+                    </div>
+                    <!-- Reel 3 -->
+                    <div
+                      class="bg-white rounded-xl shadow-sm overflow-hidden border border-gray-200"
+                    >
+                      <div class="">
+                        <iframe
+                          width="100%"
+                          height="380"
+                          src="https://www.youtube.com/embed/hoR__vLjMuc?si=X6mu3uB6B_nOOEZa"
+                          title="YouTube video player"
+                          frameborder="0"
+                          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                          referrerpolicy="strict-origin-when-cross-origin"
+                          allowfullscreen
+                        ></iframe>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- <button class="carousel-button">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      class="h-6 w-6 text-gray-600"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M9 5l7 7-7 7"
+                      />
+                    </svg>
+                  </button> -->
+                </div>
+              </section>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Review Section -->
+
+      <div
+        class="max-w-7xl mx-auto bg-white rounded-lg shadow-md p-6 sm:p-8 lg:p-10"
+      >
+        <!-- Header Section -->
+        <div
+          class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 sm:mb-8"
+        >
+          <div class="mb-4 sm:mb-0">
+            <div
+              class="flex items-center text-xl sm:text-2xl font-bold text-gray-800"
+            >
+              <span class="star-filled text-2xl sm:text-3xl mr-2">&#9733;</span>
+              <!-- Star icon -->
+              5.0 Fantastic
+            </div>
+            <p class="text-gray-600 text-sm sm:text-base ml-8 sm:ml-9">
+              100 Reviews
+            </p>
+            <p class="text-gray-500 text-xs sm:text-sm mt-1 ml-8 sm:ml-9">
+              RECOMMENDED BY 100% OF COUPLES
+            </p>
+          </div>
+          <button
+            class="bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 sm:py-3 sm:px-6 rounded-lg shadow-md transition duration-300 ease-in-out"
+          >
+            Write a review
+          </button>
+        </div>
+
+        <!-- Reviews Section -->
+        <div class="relative">
+          <div
+            class="flex overflow-x-auto space-x-4 pb-4 scrollbar-hide lg:grid lg:grid-cols-3 lg:gap-6"
+          >
+            <!-- Review Card 1 -->
+            <div
+              class="flex-shrink-0 w-full sm:w-80 lg:w-auto bg-white border border-gray-200 rounded-lg p-5 shadow-sm"
+            >
+              <div class="flex items-center mb-4">
+                <div
+                  class="w-10 h-10 sm:w-12 sm:h-12 bg-gray-200 text-gray-700 font-semibold rounded-full flex items-center justify-center text-lg sm:text-xl mr-3"
+                >
+                  I
+                </div>
+                <div>
+                  <p class="font-semibold text-gray-800">Ira V.</p>
+                  <p class="text-gray-500 text-xs">Sent on 06/03/2024</p>
+                </div>
+              </div>
+              <div class="flex mb-3">
+                <span class="star-filled text-lg">&#9733;</span>
+                <span class="star-filled text-lg">&#9733;</span>
+                <span class="star-filled text-lg">&#9733;</span>
+                <span class="star-filled text-lg">&#9733;</span>
+                <span class="star-filled text-lg">&#9733;</span>
+                <span class="text-gray-700 ml-2 font-medium">5.0</span>
+              </div>
+              <p class="font-semibold text-gray-800 mb-2">
+                "Lehngas are not just garments; they are works of art.
+              </p>
+              <p class="text-gray-600 text-sm leading-relaxed mb-3">
+                "Lehngas are not just garments; they are works of art. The
+                intricate detailing and craftsmanship that goes into making each
+                lehnga is truly awe-inspiring."
+              </p>
+              <a href="#" class="text-sm font-medium underline">Read more</a>
+            </div>
+
+            <!-- Review Card 2 -->
+            <div
+              class="flex-shrink-0 w-full sm:w-80 lg:w-auto bg-white border border-gray-200 rounded-lg p-5 shadow-sm"
+            >
+              <div class="flex items-center mb-4">
+                <div
+                  class="w-10 h-10 sm:w-12 sm:h-12 bg-gray-200 text-gray-700 font-semibold rounded-full flex items-center justify-center text-lg sm:text-xl mr-3"
+                >
+                  I
+                </div>
+                <div>
+                  <p class="font-semibold text-gray-800">Ishita</p>
+                  <p class="text-gray-500 text-xs">Sent on 06/03/2024</p>
+                </div>
+              </div>
+              <div class="flex mb-3">
+                <span class="star-filled text-lg">&#9733;</span>
+                <span class="star-filled text-lg">&#9733;</span>
+                <span class="star-filled text-lg">&#9733;</span>
+                <span class="star-filled text-lg">&#9733;</span>
+                <span class="star-filled text-lg">&#9733;</span>
+                <span class="text-gray-700 ml-2 font-medium">5.0</span>
+              </div>
+              <p class="font-semibold text-gray-800 mb-2">
+                "Lehngas are the perfect blend of tradition and modernity.
+              </p>
+              <p class="text-gray-600 text-sm leading-relaxed mb-3">
+                "Lehngas are the perfect blend of tradition and modernity. They
+                embrace cultural heritage while also incorporating contemporary
+                designs to suit every taste."
+              </p>
+              <a href="#" class="text-sm font-medium underline">Read more</a>
+            </div>
+
+            <!-- Review Card 3 -->
+            <div
+              class="flex-shrink-0 w-full sm:w-80 lg:w-auto bg-white border border-gray-200 rounded-lg p-5 shadow-sm"
+            >
+              <div class="flex items-center mb-4">
+                <div
+                  class="w-10 h-10 sm:w-12 sm:h-12 bg-orange-200 text-orange-700 font-semibold rounded-full flex items-center justify-center text-lg sm:text-xl mr-3"
+                >
+                  J
+                </div>
+                <div>
+                  <p class="font-semibold text-gray-800">Jhanvi</p>
+                  <p class="text-gray-500 text-xs">Sent on 05/03/2024</p>
+                </div>
+              </div>
+              <div class="flex mb-3">
+                <span class="star-filled text-lg">&#9733;</span>
+                <span class="star-filled text-lg">&#9733;</span>
+                <span class="star-filled text-lg">&#9733;</span>
+                <span class="star-filled text-lg">&#9733;</span>
+                <span class="star-filled text-lg">&#9733;</span>
+                <span class="text-gray-700 ml-2 font-medium">5.0</span>
+              </div>
+              <p class="font-semibold text-gray-800 mb-2">
+                Gowns are more than just garments; they are symbols of...
+              </p>
+              <p class="text-gray-600 text-sm leading-relaxed mb-3">
+                Gowns are more than just garments; they are symbols of
+                empowerment and confidence, empowering women to embrace their
+                femininity and express themselves boldly. Whether it's the
+                classic elegance of a floor-length gown or the modern allure of
+                a cocktail dress, gowns have the ability to make women feel
+                strong, beautiful, and unstoppable."
+              </p>
+              <a href="#" class="text-sm font-medium underline">Read more</a>
+            </div>
+          </div>
+          <!-- Navigation Arrows (for smaller screens if overflow-x-auto is active) -->
+          <button
+            class="absolute left-0 top-1/2 -translate-y-1/2 bg-white rounded-full p-2 shadow-md hidden lg:hidden"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="2.5"
+              stroke="currentColor"
+              class="w-6 h-6 text-gray-700"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M15.75 19.5L8.25 12l7.5-7.5"
+              />
+            </svg>
+          </button>
+          <button
+            class="absolute right-0 top-1/2 -translate-y-1/2 bg-white rounded-full p-2 shadow-md hidden lg:hidden"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="2.5"
+              stroke="currentColor"
+              class="w-6 h-6 text-gray-700"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M8.25 4.5l7.5 7.5-7.5 7.5"
+              />
+            </svg>
+          </button>
+        </div>
+
+        <!-- Campaign Section -->
+        <div class="max-w-7xl mx-auto bg-white">
+          <h2 class="text-2xl sm:text-3xl font-semibold text-gray-800 mb-6">
+            Previous Campaign
+          </h2>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Campaign Card 1 -->
+            <div
+              class="bg-white rounded-lg shadow-md overflow-hidden border border-gray-200"
+            >
+              <img
+                src="/images/cam-1.jpeg"
+                alt="Campaign Image"
+                class="w-full h-48 object-cover object-top"
+              />
+              <div class="p-4">
+                <h3 class="font-semibold text-gray-800 text-lg mb-1">
+                  Previous Campaign..
+                </h3>
+                <p class="text-gray-600 text-sm mb-4">dklanda,mncm..</p>
+                <button
+                  class="w-full bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded-lg shadow-md transition duration-300 ease-in-out"
+                >
+                  View Details
+                </button>
+              </div>
+            </div>
+
+            <!-- Campaign Card 2 -->
+            <div
+              class="bg-white rounded-lg shadow-md overflow-hidden border border-gray-200"
+            >
+              <img
+                src="/images/cap-2.jpeg"
+                alt="Campaign Image"
+                class="w-full h-48 object-cover object-top"
+              />
+              <div class="p-4">
+                <h3 class="font-semibold text-gray-800 text-lg mb-1">
+                  kkdjalkx..
+                </h3>
+                <p class="text-gray-600 text-sm mb-4">hui..</p>
+                <button
+                  class="w-full bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded-lg shadow-md transition duration-300 ease-in-out"
+                >
+                  View Details
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="max-w-7xl mx-auto !mt-6">
+        <div class="flex justify-between items-center mb-6">
+          <h2 class="text-2xl font-semibold text-gray-800">Similar Artists</h2>
+          <div class="flex space-x-2">
+            <!-- Left Arrow -->
+            <button
+              id="scrollLeft"
+              class="flex items-center justify-center w-8 h-8 rounded-full bg-pink-100 text-pink-500 hover:bg-pink-200 focus:outline-none focus:ring-2 focus:ring-pink-400"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 256 256"
+                fill="currentColor"
+                class="w-5 h-5"
+              >
+                <path
+                  d="M168.49,192.49a12,12,0,0,1-17,17l-80-80a12,12,0,0,1,0-17l80-80a12,12,0,0,1,17,17L97,128Z"
+                ></path>
+              </svg>
+            </button>
+            <!-- Right Arrow -->
+            <button
+              id="scrollRight"
+              class="flex items-center justify-center w-8 h-8 rounded-full bg-pink-100 text-pink-500 hover:bg-pink-200 focus:outline-none focus:ring-2 focus:ring-pink-400"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 256 256"
+                fill="currentColor"
+                class="w-5 h-5"
+              >
+                <path
+                  d="M181.66,133.66l-80,80a12,12,0,0,1-17-17L156.34,128,84.66,56.34a12,12,0,0,1,17-17l80,80A12,12,0,0,1,181.66,133.66Z"
+                ></path>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <div
+          id="artistContainer"
+          class="flex overflow-x-hidden space-x-6 pb-4 scroll-container text-center"
+        >
+          <!-- Artist Card 1 (Image) -->
+          <div class="flex-shrink-0 w-56 bg-white rounded-xl shadow-md p-4">
+            <div
+              class="w-full h-40 bg-gray-200 rounded-lg overflow-hidden mb-3"
+            >
+              <img
+                src="/images/men-avatar-2024-06-03-10-53-33-9935.png"
+                alt="Tanveer Ghazi"
+                class="w-full h-full object-cover"
+              />
+            </div>
+            <h3 class="text-lg font-medium text-gray-900 truncate mb-1">
+              Tanveer Ghazi
+            </h3>
+            <p class="text-sm text-gray-600 mb-2">Writer</p>
+            <div
+              class="flex items-center text-gray-500 text-sm gap-1 justify-center"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="18"
+                height="18"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="lucide lucide-map-pin-icon lucide-map-pin"
+              >
+                <path
+                  d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"
+                />
+                <circle cx="12" cy="10" r="3" />
+              </svg>
+              <span class="text-center">Mumbai</span>
+            </div>
+          </div>
+
+          <!-- Artist Card 2 (Illustration) -->
+          <div class="flex-shrink-0 w-56 rounded-xl shadow-md p-4">
+            <div
+              class="w-full h-40 flex items-center justify-center bg-pink-100 rounded-lg overflow-hidden mb-3"
+            >
+              <img
+                src="/images/tanveer-ghazi-2024-06-11-03-28-12-2966.jpg"
+                alt="Riya Gupta"
+                class="w-full h-full object-cover object-top"
+              />
+            </div>
+            <h3 class="text-lg font-medium text-gray-900 truncate mb-1">
+              Riya Gupta
+            </h3>
+            <p class="text-sm text-gray-600 mb-2">Writer</p>
+            <div
+              class="flex items-center text-gray-500 text-sm gap-1 justify-center"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="18"
+                height="18"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="lucide lucide-map-pin-icon lucide-map-pin"
+              >
+                <path
+                  d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"
+                />
+                <circle cx="12" cy="10" r="3" />
+              </svg>
+              <span class="text-center">Bhopal</span>
+            </div>
+          </div>
+
+          <!-- Artist Card 3 (Illustration) -->
+          <div class="flex-shrink-0 w-56 rounded-xl shadow-md p-4">
+            <div
+              class="w-full h-40 flex items-center justify-center bg-pink-100 rounded-lg overflow-hidden mb-3"
+            >
+              <img
+                src="/images/women-avatar-2024-06-03-10-53-34-7018.png"
+                alt="Sapna Sharma"
+                class="w-full h-full object-cover"
+              />
+            </div>
+            <h3 class="text-lg font-medium text-gray-900 truncate mb-1">
+              Sapna Sharma
+            </h3>
+            <p class="text-sm text-gray-600 mb-2">Writer</p>
+            <div
+              class="flex items-center text-gray-500 text-sm gap-1 justify-center"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="18"
+                height="18"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="lucide lucide-map-pin-icon lucide-map-pin"
+              >
+                <path
+                  d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"
+                />
+                <circle cx="12" cy="10" r="3" />
+              </svg>
+              <span class="text-center">Sonipat</span>
+            </div>
+          </div>
+
+          <!-- Artist Card 4 (Illustration) -->
+          <div class="flex-shrink-0 w-56 rounded-xl shadow-md p-4">
+            <div
+              class="w-full h-40 flex items-center justify-center bg-pink-100 rounded-lg overflow-hidden mb-3"
+            >
+              <img
+                src="/images/women-avatar-2024-06-03-10-53-34-7018.png"
+                alt="Monika Singh"
+                class="w-full h-full object-cover"
+              />
+            </div>
+            <h3 class="text-lg font-medium text-gray-900 truncate mb-1">
+              Monika Singh
+            </h3>
+            <p class="text-sm text-gray-600 mb-2">Writer</p>
+            <div
+              class="flex items-center text-gray-500 text-sm gap-1 justify-center"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="18"
+                height="18"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="lucide lucide-map-pin-icon lucide-map-pin"
+              >
+                <path
+                  d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"
+                />
+                <circle cx="12" cy="10" r="3" />
+              </svg>
+              <span class="text-center">Bhopal</span>
+            </div>
+          </div>
+
+          <!-- Artist Card 5 (Illustration) -->
+          <div class="flex-shrink-0 w-56 rounded-xl shadow-md p-4">
+            <div
+              class="w-full h-40 flex items-center justify-center bg-pink-100 rounded-lg overflow-hidden mb-3"
+            >
+              <img
+                src="/images/women-avatar-2024-06-03-10-53-34-7018.png"
+                alt="Mohd Gazi"
+                class="w-full h-full object-cover"
+              />
+            </div>
+            <h3 class="text-lg font-medium text-gray-900 truncate mb-1">
+              Mohd Gazi
+            </h3>
+            <p class="text-sm text-gray-600 mb-2">Writer</p>
+            <div
+              class="flex items-center text-gray-500 text-sm gap-1 justify-center"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="18"
+                height="18"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="lucide lucide-map-pin-icon lucide-map-pin"
+              >
+                <path
+                  d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"
+                />
+                <circle cx="12" cy="10" r="3" />
+              </svg>
+              <span class="text-center">Mumbai</span>
+            </div>
+          </div>
+
+          <!-- Artist Card 5 (Illustration) -->
+          <div class="flex-shrink-0 w-56 rounded-xl shadow-md p-4">
+            <div
+              class="w-full h-40 flex items-center justify-center bg-pink-100 rounded-lg overflow-hidden mb-3"
+            >
+              <img
+                src="/images/men-avatar-2024-06-03-10-53-33-9935.png"
+                alt="Mohd Gazi"
+                class="w-full h-full object-cover object-top"
+              />
+            </div>
+            <h3 class="text-lg font-medium text-gray-900 truncate mb-1">
+              Mohd Gazi
+            </h3>
+            <p class="text-sm text-gray-600 mb-2">Writer</p>
+            <div
+              class="flex items-center text-gray-500 text-sm gap-1 justify-center"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="18"
+                height="18"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="lucide lucide-map-pin-icon lucide-map-pin"
+              >
+                <path
+                  d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"
+                />
+                <circle cx="12" cy="10" r="3" />
+              </svg>
+              <span class="text-center">Agra</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer Section -->
+    <footer
+      class="bg-[#011627] text-white py-12 px-6 sm:px-10 lg:px-20 rounded-t-lg shadow-lg"
+    >
+      <div
+        class="container mx-auto grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-8"
+      >
+        <!-- Useful Links Section -->
+        <div>
+          <h3 class="text-xl font-bold mb-6 text-white">Useful Links</h3>
+          <ul class="space-y-3">
+            <li>
+              <a
+                href="#"
+                class="text-gray-300 hover:text-pink-500 transition-colors duration-200"
+                >About Us</a
+              >
+            </li>
+            <li>
+              <a
+                href="#"
+                class="text-gray-300 hover:text-pink-500 transition-colors duration-200"
+                >Find Influencers</a
+              >
+            </li>
+            <li>
+              <a
+                href="#"
+                class="text-gray-300 hover:text-pink-500 transition-colors duration-200"
+                >Talent Management</a
+              >
+            </li>
+            <li>
+              <a
+                href="#"
+                class="text-gray-300 hover:text-pink-500 transition-colors duration-200"
+                >Disclaimer</a
+              >
+            </li>
+            <li>
+              <a
+                href="#"
+                class="text-gray-300 hover:text-pink-500 transition-colors duration-200"
+                >Venues</a
+              >
+            </li>
+          </ul>
+        </div>
+
+        <!-- More Links Section -->
+        <div>
+          <h3 class="text-xl font-bold mb-6 text-white">More Links</h3>
+          <ul class="space-y-3">
+            <li>
+              <a
+                href="#"
+                class="text-gray-300 hover:text-pink-500 transition-colors duration-200"
+                >Contact Us</a
+              >
+            </li>
+            <li>
+              <a
+                href="#"
+                class="text-gray-300 hover:text-pink-500 transition-colors duration-200"
+                >Blogs</a
+              >
+            </li>
+            <li>
+              <a
+                href="#"
+                class="text-gray-300 hover:text-pink-500 transition-colors duration-200"
+                >Terms and Conditions</a
+              >
+            </li>
+            <li>
+              <a
+                href="#"
+                class="text-gray-300 hover:text-pink-500 transition-colors duration-200"
+                >Privacy Policy</a
+              >
+            </li>
+          </ul>
+        </div>
+
+        <!-- Social Media and Buttons Section -->
+        <div
+          class="md:col-span-1 lg:col-span-2 flex flex-col items-start lg:items-end space-y-8"
+        >
+          <!-- Social Media Icons -->
+
+          <div class="flex space-x-4">
+            <a
+              href="#"
+              class="w-10 h-10 flex items-center justify-center rounded-full bg-gray-700 hover:bg-blue-600 transition-colors duration-200"
+            >
+              <div data-lucide="facebook" class="text-white w-5 h-5"></div>
+            </a>
+            <a
+              href="#"
+              class="w-10 h-10 flex items-center justify-center rounded-full bg-gray-700 hover:bg-blue-400 transition-colors duration-200"
+            >
+              <div data-lucide="twitter" class="text-white w-5 h-5"></div>
+            </a>
+            <a
+              href="#"
+              class="w-10 h-10 flex items-center justify-center rounded-full bg-gray-700 hover:bg-pink-600 transition-colors duration-200"
+            >
+              <div data-lucide="camera" class="text-white w-5 h-5"></div>
+            </a>
+            <a
+              href="#"
+              class="w-10 h-10 flex items-center justify-center rounded-full bg-gray-700 hover:bg-blue-700 transition-colors duration-200"
+            >
+              <div data-lucide="linkedin" class="text-white w-5 h-5"></div>
+            </a>
+            <a
+              href="#"
+              class="w-10 h-10 flex items-center justify-center rounded-full bg-gray-700 hover:bg-red-600 transition-colors duration-200"
+            >
+              <div data-lucide="youtube" class="text-white w-5 h-5"></div>
+            </a>
+          </div>
+
+          <!-- Action Buttons -->
+          <div class="flex flex-col space-y-4 w-full max-w-xs">
+            <button
+              class="bg-red-600 text-white font-semibold py-3 px-6 rounded-lg shadow-md transition-colors duration-200 w-full"
+            >
+              REGISTER AS ARTIST
+            </button>
+            <button
+              class="bg-red-600 text-white font-semibold py-3 px-6 rounded-lg shadow-md transition-colors duration-200 w-full"
+            >
+              HIRE ARTIST
+            </button>
+          </div>
+
+          <!-- Drop An Email Section -->
+          <div class="mt-8 text-left lg:text-right w-full">
+            <h4 class="text-xl font-bold mb-2 text-white">Drop An Email</h4>
+            <a
+              href="mailto:info@thetalentsquare.com"
+              class="text-gray-300 hover:text-pink-500 transition-colors duration-200"
+              >info@thetalentsquare.com</a
+            >
+          </div>
+        </div>
+      </div>
+
+      <!-- Copyright Section -->
+      <div
+        class="border-t border-gray-700 mt-12 pt-8 text-center text-gray-500 text-sm"
+      >
+        &copy; 2025, The Talent Square | All Rights Reserved.
+      </div>
+    </footer>
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const artistContainer = document.getElementById("artistContainer");
+        const scrollLeftBtn = document.getElementById("scrollLeft");
+        const scrollRightBtn = document.getElementById("scrollRight");
+
+        // Scroll amount (e.g., width of one card + its margin)
+        const scrollAmount = 224; // 48 (width) + 24 (space-x-6) - approximately 192px width + 24px margin
+
+        scrollLeftBtn.addEventListener("click", function () {
+          artistContainer.scrollBy({
+            left: -scrollAmount,
+            behavior: "smooth",
+          });
+        });
+
+        scrollRightBtn.addEventListener("click", function () {
+          artistContainer.scrollBy({
+            left: scrollAmount,
+            behavior: "smooth",
+          });
+        });
+      });
+      document.addEventListener("DOMContentLoaded", function () {
+        const mobileMenuButton = document.getElementById("mobile-menu-button");
+        const closeMobileMenuButton = document.getElementById(
+          "close-mobile-menu-button"
+        ); // New close button
+        const mobileMenu = document.getElementById("mobile-menu");
+
+        function openMobileMenu() {
+          mobileMenu.classList.remove("hidden"); // Make it visible (though still off-screen)
+          // Use requestAnimationFrame to ensure the 'hidden' removal has rendered
+          // before applying the translation transition. This ensures the animation plays.
+          requestAnimationFrame(() => {
+            mobileMenu.classList.remove("translate-x-full"); // Slide it in
+            mobileMenu.classList.add("translate-x-0"); // Ensure it comes to its final position
+          });
+        }
+
+        function closeMobileMenu() {
+          mobileMenu.classList.remove("translate-x-0"); // Start moving it off-screen
+          mobileMenu.classList.add("translate-x-full"); // Move it off-screen
+
+          // After the transition completes, hide it completely so it doesn't block interactions
+          mobileMenu.addEventListener(
+            "transitionend",
+            function handler() {
+              mobileMenu.classList.add("hidden");
+              mobileMenu.removeEventListener("transitionend", handler); // Remove listener to prevent re-firing
+            },
+            { once: true }
+          ); // Use { once: true } for modern browsers
+        }
+
+        if (mobileMenuButton && mobileMenu) {
+          mobileMenuButton.addEventListener("click", openMobileMenu);
+        }
+
+        if (closeMobileMenuButton && mobileMenu) {
+          closeMobileMenuButton.addEventListener("click", closeMobileMenu);
+        }
+      });
+      function toggleReadMore() {
+        const shortText = document.getElementById("shortText");
+        const fullText = document.getElementById("fullText");
+        const btn = document.getElementById("readMoreBtn");
+
+        const isExpanded = fullText.classList.contains("hidden") === false;
+
+        if (isExpanded) {
+          fullText.classList.add("hidden");
+          shortText.classList.remove("hidden");
+          btn.textContent = "Read More";
+        } else {
+          fullText.classList.remove("hidden");
+          shortText.classList.add("hidden");
+          btn.textContent = "Read Less";
+        }
+      }
+      lucide.createIcons();
+    </script>
+  </body>
+</html>
